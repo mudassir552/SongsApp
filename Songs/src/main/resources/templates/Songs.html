@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="headSection">
+	<meta charset="UTF-8">
+	<link th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}" rel="stylesheet" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+		  integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<div class="search">
+	<form th:action="@{/songslo}" th:object="${So}" method="post">
+		<div class="inputContainer">
+			<input type="text" class="input" name="song" />
+			<i class="fas fa-search">type a song...</i>
+		</div>
+		<button type="submit" class="search-btn">Search</button>
+	</form>
+
+	<div class="SongsContainer">
+		<div class="loader"></div>
+		<ul class="innerContainer">
+			<li class="inner"
+				th:each="s, iStat : ${Songs}"
+				th:attr="data-index=${iStat.count + 1}, Song=${s}">
+			</li>
+		</ul>
+	</div>
+</div>
+
+<script th:src="@{/js/Song.js}"></script>
+</body>
+</html>
