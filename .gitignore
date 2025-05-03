@@ -41,8 +41,8 @@ Thumbs.db
 *.log
 
 # Application-specific
-application-*.properties
-application-*.yml
+**/application.properties
+**/application-*.properties
 .properties
 .env
 *.db
