@@ -8,8 +8,7 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-       git credentialsId: 'github-cred', url: 'https://github.com/mudassir552/SongsApp.git', branch: 'main'
-
+                git credentialsId: 'github-cred', url: 'https://github.com/mudassir552/MusicApps.git'
             }
         }
 
@@ -37,22 +36,19 @@ pipeline {
                             def imageName = "${DOCKER_REGISTRY}/${service.name.toLowerCase()}:${env.IMAGE_TAG}"
                             echo "📦 Building and pushing image: ${imageName}"
 
-                            // Inject the service config file
                             withCredentials([file(credentialsId: service.configId, variable: 'CONFIG_FILE')]) {
-                                sh """
-                                    cp \$CONFIG_FILE ${service.name}/src/main/resources/application.properties
+                                bat """
+                                    copy %CONFIG_FILE% ${service.name}\\src\\main\\resources\\application.properties
                                 """
                             }
 
-                            // Build and push Docker image
-                            sh """
-                                cd ${service.name}
-                                mvn clean compile com.google.cloud.tools:jib-maven-plugin:3.4.0:build \
-                                    -DskipTests \
-                                    -Dimage=${imageName} \
-                                    -Djib.to.auth.username=$DOCKER_USER \
-                                    -Djib.to.auth.password=$DOCKER_PASS
-                                cd ..
+                            bat """
+                                cd ${service.name} && ^
+                                mvn clean compile com.google.cloud.tools:jib-maven-plugin:3.4.0:build ^
+                                    -DskipTests ^
+                                    -Dimage=${imageName} ^
+                                    -Djib.to.auth.username=%DOCKER_USER% ^
+                                    -Djib.to.auth.password=%DOCKER_PASS%
                             """
                         }
                     }
@@ -63,11 +59,11 @@ pipeline {
         stage('Commit New Version') {
             steps {
                 script {
-                    sh """
+                    bat """
                         git config user.email "shakeebmd9@gmail.com"
                         git config user.name "mudassir552"
                         git add VERSION.txt
-                        git commit -m " Bump image version to ${env.IMAGE_TAG}"
+                        git commit -m "Bump image version to ${env.IMAGE_TAG}"
                         git push origin main
                     """
                 }
