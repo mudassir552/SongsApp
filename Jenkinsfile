@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git 'https://github.com/mudassir552/MusicApps.git'
+                git 'https://github.com/mudassir552/MusicApps.git , credentialsId: 'github-cred'
             }
         }
 
