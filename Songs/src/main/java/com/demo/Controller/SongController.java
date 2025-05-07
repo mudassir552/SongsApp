@@ -1,6 +1,8 @@
 package com.demo.Controller;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,6 +47,7 @@ public class SongController  {
 @Autowired
 private SongServiceImpl SongserviceImpl;
 
+	private static final Logger log = LoggerFactory.getLogger(SongController.class);
 	@GetMapping("/test")
 	@ResponseBody
 	public String test() {
@@ -99,29 +102,25 @@ private SongServiceImpl SongserviceImpl;
 		return "Songs" ;
 		
 	}
-	
-	
-	
-	 
-	  
-	  @GetMapping("/song") 
-public ResponseEntity<List<Songs>> song(@RequestBody Songs s) { 
-		  Query query=new Query(Criteria.where("song").is(s.getSong())); //List<Songs> List<Songs>
-	  List<Songs> songs=mongoOperations.find(query, Songs.class);
-	  
-	  
-	  if(songs.isEmpty()) {
 
-return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList()); 
-}
-	  return ResponseEntity.status(200).body(songs);
-	  
-	  }
-	  
-	  
-	  @GetMapping("/songs")   
-	  @Cacheable(value = "songsCache", key = "{#page, #size}")
-	  @CacheEvict(value = "songsCache", allEntries = true)
+
+
+
+
+	@GetMapping("/song")
+	@ResponseBody
+	@Cacheable(value = "songsCache", key = "'allSongs'")
+	public List<Songs> song() {
+
+		  log.info("himed55");
+		List<Songs> songs = mongoOperations.findAll(Songs.class);
+
+      return songs;
+	}
+
+
+
+	@GetMapping("/songs")
         public ResponseEntity<List<Songs>> songs(@RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "6") int size) { 
 		 //List<Songs> List<Songs>

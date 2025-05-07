@@ -1,7 +1,7 @@
 package com.example.demo.Controllers;
 
 import java.util.*;
-
+import com.example.demo.UserinfoService.SongService;
 import com.example.demo.Exceptions.UserNotFoundException;
 import com.example.demo.Requests.SongsRequest;
 import com.example.demo.Roles.Roles;
@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 
@@ -63,8 +64,10 @@ public class UserController {
    //String api = "http://localhost:8082/songs";
 
 
+   @Autowired
+    private SongService SongService;
 
-    @Autowired
+     @Autowired
     private AuthenticationManager authenticationManager;
 
     @GetMapping("/acesss")
@@ -173,47 +176,20 @@ public class UserController {
         response.addCookie(accessTokenCookie);
         response.addCookie(refreshTokenCookie);
 
-        return "redirect:/userSongs";
+        return "redirect:/user-songs";
     }
 
 
-    @GetMapping("/api/videos/trending")
-    @ResponseBody
-    public ResponseEntity<?> getTrendingVideos() {
-        String url = "https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&chart=mostPopular&videoCategoryId=10&regionCode=IN&key=AIzaSyB13cUnyHEKnGGrIce50xfkdSkroFe9NJ4";
-        log.info("hittting  Api");
-
-        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
-
-        return ResponseEntity.ok(response.getBody());
-    }
 
 
-    @GetMapping("/userSongs")
-    public String getUserSongs(@CookieValue(name = "accessToken", required = false) String token, Model model) {
-        System.out.println("Token from cookie: " + token);
 
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + token);
-
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        ResponseEntity<List<SongsRequest>> response = restTemplate.exchange(
-                SONGS_API_URL,
-                HttpMethod.GET,
-                entity,
-                new ParameterizedTypeReference<List<SongsRequest>>() {
-                }
-        );
-
-        List<SongsRequest> songs = response.getBody();
+    @GetMapping("/user-songs")
+    public String getUserSongs(@CookieValue(name = "accessToken", required = true) String token, Model model) {
+        List<SongsRequest> songs = SongService.getSongs(token);
         model.addAttribute("songs", songs);
-        log.info("songs", songs);
-
-
         return "Songs";
     }
+
 
 
     @PostMapping("/refresh-token")

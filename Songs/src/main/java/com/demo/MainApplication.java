@@ -2,9 +2,11 @@ package com.demo;
 
 
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -26,11 +28,14 @@ public class MainApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(MainApplication.class, args);
-	
+
 	}
-	
-	   @Bean
-	    public ConcurrentMapCacheManager cacheManager() {
-	        return new ConcurrentMapCacheManager("songsCache");
-	    }
+
+
+	@Bean
+	public CommandLineRunner checkCacheManager(CacheManager cacheManager) {
+		return args -> {
+			System.out.println(">>> CacheManager is: " + cacheManager.getClass().getName());
+		};
+	}
 }

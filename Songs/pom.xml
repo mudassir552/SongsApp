@@ -19,7 +19,16 @@
 			<spring-cloud.version>2022.0.4</spring-cloud.version>
 	</properties>
 
+
 	<dependencies>
+
+
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/com.netflix.netflix-commons/netflix-commons-util -->
 
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-context-support -->
@@ -74,11 +83,7 @@
         <artifactId>spring-boot-starter-cache</artifactId>
     </dependency>
 
-  
-<dependency>  
-      <groupId>org.ehcache</groupId>  
-      <artifactId>ehcache</artifactId>  
-</dependency>  
+
 <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator -->
 <dependency>
     <groupId>org.springframework.boot</groupId>

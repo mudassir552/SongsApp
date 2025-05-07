@@ -29,6 +29,8 @@ gradle.properties
 # IDEs and Tools
 .idea/
 
+*.env
+*secrets.properties
 
 .vscode/
 *.class

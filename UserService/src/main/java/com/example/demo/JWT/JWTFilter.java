@@ -56,7 +56,7 @@ public class JWTFilter extends OncePerRequestFilter{
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 
-		List<String> paths = List.of("/login","/authenticate","/api/videos/trending");
+		List<String> paths = List.of("/login","/authenticate","/api/videos/trending","/song","/user/song");
 
 		String token = null;
 		String username = null;

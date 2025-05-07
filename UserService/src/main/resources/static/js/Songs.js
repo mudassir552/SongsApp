@@ -3,7 +3,7 @@ const songsData = document.querySelector('.SongsContainer').getAttribute('data-s
 const songsContainer = document.querySelector('.SongsContainer');
 const songs = JSON.parse(songsData);
 
-    const searchBtn=document.querySelector('.search-btn');
+const searchBtn=document.querySelector('.search-btn');
 console.log(songs);
 let audio=null;
 
@@ -12,37 +12,9 @@ console.log(songs.length);
 let html="";
 
 
-function loadTrendingYoutubeVideos() {
-    fetch("/api/videos/trending")
-        .then(res => res.json())
-        .then(data => {
-          const songsContainer = document.querySelector('.SongsContainer');
-
-            data.items.forEach(video => {
-                const videoId = video.id;
 
 
 
-                // Create a video card
-                const videoDiv = document.createElement("div");
-                videoDiv.className = "video-card";
-
-                videoDiv.innerHTML = `
-           <br>
-                    <iframe width="560" height="315"   style="margin: 30px 40px; "src="https://www.youtube.com/embed/${videoId}"
-                        frameborder="0" allowfullscreen></iframe>
-                        <br>
-                `;
-
-                songsContainer.appendChild(videoDiv);
-            });
-        })
-        .catch(error => {
-            console.error("Error loading videos:", error);
-        });
-}
-
-window.onload = loadTrendingYoutubeVideos;
 searchBtn.addEventListener("click", (e) => {
   e.preventDefault();
 
@@ -51,22 +23,24 @@ searchBtn.addEventListener("click", (e) => {
   const inputText = document.querySelector(".input-text").value;
 
  if (!inputText || inputText.trim().length === 0) {
-   window.location.href = "/userSongs";
+   window.location.href = "/user/userSongs";
    return;
  }
 
 
   console.log(inputText);
 
-  fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&q=${inputText}&videoCategoryId=10&regionCode=IN&maxResults=6&key=AIzaSyB13cUnyHEKnGGrIce50xfkdSkroFe9NJ4`)
+ console.log("Hitting backend from 2");
+ fetch(`/user/api/youtube/videos/${encodeURIComponent(inputText)}`)
+
     .then(res => res.json())
     .then(data => {
-      songsContainer.innerHTML = ""; // Clear previous results
+      songsContainer.innerHTML = "";
 
       data.items.forEach(video => {
         const videoId = video.id.videoId;
 
-        // Create a video card div
+
         const videoDiv = document.createElement("div");
         videoDiv.className = "video-card";
 

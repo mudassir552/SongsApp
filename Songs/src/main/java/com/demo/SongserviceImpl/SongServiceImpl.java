@@ -18,9 +18,7 @@ import com.demo.SongsService.SongsService;
 @Component
 public class SongServiceImpl implements SongsService{
 	
-	@Autowired
-	private ConcurrentMapCacheManager ConcurrentMapCacheManager;
-	
+
 	@Autowired
 	private  SongsRepo songsRepo;
 	
