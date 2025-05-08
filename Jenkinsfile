@@ -36,11 +36,19 @@ pipeline {
                             def imageName = "${DOCKER_REGISTRY}/${service.name.toLowerCase()}:${env.IMAGE_TAG}"
                             echo "📦 Building and pushing image: ${imageName}"
 
-                            withCredentials([file(credentialsId: service.configId, variable: 'CONFIG_FILE')]) {
-                                bat """
-                                    copy %CONFIG_FILE% ${service.name}\\src\\main\\resources\\application.properties
-                                """
-                            }
+                        withCredentials([file(credentialsId: service.configId, variable: 'CONFIG_FILE')]) {
+       bat """
+        echo Testing secret file for ${service.name}
+        echo CONFIG_FILE is: %CONFIG_FILE%
+        if not exist "%CONFIG_FILE%" (
+            echo ERROR: Secret config file not found!
+            exit /b 1
+        )
+        type %CONFIG_FILE%
+        copy %CONFIG_FILE% ${service.name}\\src\\main\\resources\\application.properties
+    """
+}
+
 
                             bat """
                                 cd ${service.name} && ^
