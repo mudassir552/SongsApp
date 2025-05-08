@@ -39,7 +39,7 @@ pipeline {
                         withCredentials([file(credentialsId: service.configId, variable: 'CONFIG_FILE')]) {
        bat """
         echo Testing secret file for ${service.name}
-        echo CONFIG_FILE is: %CONFIG_FILE%
+           echo "TEMP FILE PATH (debug only): ${CONFIG_FILE}"
         if not exist "%CONFIG_FILE%" (
             echo ERROR: Secret config file not found!
             exit /b 1
