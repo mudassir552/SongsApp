@@ -81,10 +81,10 @@ pipeline {
 
     post {
         success {
-            echo "✅ All services built and Docker images pushed with tag ${env.IMAGE_TAG}!"
+            echo "  Docker images pushed with tag ${env.IMAGE_TAG}!"
         }
         failure {
-            echo "❌ Build failed. See logs above for details."
+            echo " logs above for details."
         }
     }
 }
