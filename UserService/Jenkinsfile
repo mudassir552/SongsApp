@@ -1,0 +1,76 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_REPO = 'shakeebmd9375'
+        SERVICE_NAME = 'UserService'
+        CONFIG_CRED_ID = 'userservice-dev'  
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git credentialsId: 'github-cred', url: 'https://github.com/mudassir552/SongsApp.git', branch: 'main'
+            }
+        }
+
+        stage('Generate Version Tag') {
+            steps {
+                script {
+                    def versionFile = "${SERVICE_NAME}/version.txt"
+                    def version = readFile(versionFile).trim()
+                    def newVersion = version.toInteger() + 1
+                    env.IMAGE_TAG = "v${newVersion}"
+                    writeFile file: versionFile, text: "${newVersion}"
+                }
+            }
+        }
+
+        stage('Build and Push Docker Image with Jib') {
+            steps {
+                withCredentials([
+                    usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS'),
+                    file(credentialsId: "${CONFIG_CRED_ID}", variable: 'CONFIG_FILE')
+                ]) {
+                    script {
+                        echo "Building Docker image: ${DOCKER_REPO}/userservice:${IMAGE_TAG}"
+                    }
+
+                    bat """
+                        echo === Copying config file ===
+                        if not exist "%CONFIG_FILE%" (
+                            echo ERROR: Config file not found!
+                            exit /b 1
+                        )
+
+                        copy "%CONFIG_FILE%" "${SERVICE_NAME}\\src\\main\\resources\\application.properties"
+
+                        echo === Building with Maven Jib ===
+                        cd ${SERVICE_NAME}
+                        mvn compile com.google.cloud.tools:jib-maven-plugin:3.4.0:build -Dimage=${DOCKER_REPO}/userservice:${IMAGE_TAG} -Ddocker.user=%DOCKER_USER% -Ddocker.pass=%DOCKER_PASS%
+                    """
+                }
+            }
+        }
+
+        stage('Commit New Version') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'github-cred', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
+                    bat """
+                        git config user.email "ci-bot@example.com"
+                        git config user.name "CI Bot"
+                        git add ${SERVICE_NAME}/version.txt
+                        git commit -m "Bump version to ${IMAGE_TAG}"
+                        git push https://%GIT_USER%:%GIT_PASS%@github.com/mudassir552/SongsApp.git HEAD:main
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        failure {
+            echo "Build failure";
+        }
+    }
+}
