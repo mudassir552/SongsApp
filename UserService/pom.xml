@@ -202,6 +202,10 @@
 				<configuration>
 					<to>
 						<image>shakeebmd9375/userservice:musicapp16</image>
+						  <auth>
+        <username>${docker.user}</username>
+        <password>${docker.pass}</password>
+      </auth>
 					</to>
 				</configuration>
 			</plugin>
