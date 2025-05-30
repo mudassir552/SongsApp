@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.example.demo.UserinfoService.UserinfoService;
@@ -55,21 +56,36 @@ public class JWTFilter extends OncePerRequestFilter{
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
+		System.out.println("re55"+request.getServletPath());
 
-		List<String> paths = List.of("/login","/authenticate","/api/videos/trending","/song","/user/song");
 
 		String token = null;
 		String username = null;
 
-		String requestedPath = request.getServletPath();
 
 
+		String requestedPath = request.getServletPath(); // this is WITHOUT context path
+		System.out.println("Requested Path: " + requestedPath);
 
+		AntPathMatcher matcher = new AntPathMatcher();
+      String c="/user+requestedPath";
+		List<String> publicPaths = List.of(
+				"/login",
+				"/authenticate",
+				"/api/videos/trending",
+				"/song",
+				"/actuator/**"
+		);
 
-		if (paths.stream().anyMatch(path -> path.equals(requestedPath))) {
+		boolean isPublic = publicPaths.stream().anyMatch(path -> matcher.match(path, requestedPath));
+		System.out.println("re66 " + isPublic);
+		if (isPublic  ) {
 			filterChain.doFilter(request, response);
 			return;
 		}
+
+
+
 
 
 		// First try from header

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+
 import org.springframework.web.client.RestTemplate;
 
 @Controller
@@ -40,8 +40,8 @@ public class YoutubeController{
                 + video + "&videoCategoryId=10&regionCode=IN&maxResults=3&key=" + YOUTUBE_API_KEY;
         log.info("hittting   youtube Api");
 
-        ResponseEntity<YouTubeResponse> response = restTemplate.getForEntity(url, YouTubeResponse.class);
-
+        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+     log.info("respone"+response);
         return ResponseEntity.ok(response.getBody());
     }
 

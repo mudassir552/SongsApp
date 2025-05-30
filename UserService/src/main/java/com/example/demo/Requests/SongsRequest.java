@@ -1,5 +1,7 @@
 package com.example.demo.Requests;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Arrays;
 import java.util.Base64;
 
@@ -10,34 +12,28 @@ public class SongsRequest {
 
     private String artist;
 
+    @JsonProperty("imageLoc")
+    private String imageloc;
 
-    private byte[] image;
+    @JsonProperty("songLoc")
+    private String songloc;
 
-    private byte[] SongFile;
-
-
+    @JsonProperty("UserId")
     private Long UserId;
+
 
     public SongsRequest() {
 
     }
 
 
-
-    public SongsRequest(String id, String song, String artist, byte[] image, byte[] songFile, Long userId) {
-        super();
-
+    public SongsRequest(String song, String artist, String imageloc, String songloc, Long userId) {
         this.song = song;
         this.artist = artist;
-        this.image = image;
-        SongFile = songFile;
+        this.imageloc = imageloc;
+        this.songloc = songloc;
         UserId = userId;
     }
-
-
-
-
-
 
     public String getSong() {
         return song;
@@ -56,32 +52,23 @@ public class SongsRequest {
     }
 
 
+    public String getImageloc() {
+        return imageloc;
+    }
 
+    public void setImageloc(String imageloc) {
+        this.imageloc = imageloc;
+    }
 
+    public String getSongloc() {
+        return songloc;
+    }
 
-    public byte[] getImage() {
-        return image;
+    public void setSongloc(String songloc) {
+        this.songloc = songloc;
     }
 
 
-
-
-
-    public void setImage(byte[] image) {
-        this.image = image;
-    }
-
-
-
-    public byte[] getSongFile() {
-        return SongFile;
-    }
-
-
-
-    public void setSongFile(byte[] songFile) {
-        SongFile = songFile;
-    }
 
     public Long getUserId() {
         return UserId;
@@ -94,14 +81,12 @@ public class SongsRequest {
 
     @Override
     public String toString() {
-        return "{" +
-                "\"song\": \"" + song + "\"," +
-                "\"artist\": \"" + artist + "\"," +
-                "\"image\": \"" + Base64.getEncoder().encodeToString(image) + "\"," +
-                "\"songFile\": \"" + Base64.getEncoder().encodeToString(SongFile) + "\"," +
-                "\"userId\": " + UserId +
-                "}";
+        return "SongsRequest{" +
+                "song='" + song + '\'' +
+                ", artist='" + artist + '\'' +
+                ", imageloc='" + imageloc + '\'' +
+                ", songloc='" + songloc + '\'' +
+                ", UserId=" + UserId +
+                '}';
     }
-
-
 }

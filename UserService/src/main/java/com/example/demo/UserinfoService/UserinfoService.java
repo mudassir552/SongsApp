@@ -18,45 +18,45 @@ import java.util.Optional;
 
 @Service
 public class UserinfoService implements UserDetailsService {
-	
-	
-	
-
-	@Autowired
-	private Userrepo userrepository;
-	
-   //Userrepo userrepository = new Userrepo();
-	
-	public UserinfoService() {
-		
-	}
-	
-
-	/*
-	 * @Autowired public UserinfoService(Userrepo userrepo) {
-	 * this.userrepository=userrepo; }
-	 */
-	
-	
 
 
-	
 
-	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-	
-		System.out.println("attttttttttttttt"+username);
-		Optional<User> users=userrepository.findByName(username);
-		
-		
-		Userinfo user = new Userinfo(users.get());
+
+    @Autowired
+    private Userrepo userrepository;
+
+    //Userrepo userrepository = new Userrepo();
+
+    public UserinfoService() {
+
+    }
+
+
+    /*
+     * @Autowired public UserinfoService(Userrepo userrepo) {
+     * this.userrepository=userrepo; }
+     */
+
+
+
+
+
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        System.out.println("attttttttttttttt"+username);
+        Optional<User> users=userrepository.findByName(username);
+
+
+        Userinfo user = new Userinfo(users.get());
         // User up=service.getUser(username);
-         
-	    System.out.println("from user info service load"+user.getAuthorities());
-   
-	return user;
-		
-	}
-	
+
+        System.out.println("from user info service load"+user.getAuthorities());
+
+        return user;
+
+    }
+
 
 }

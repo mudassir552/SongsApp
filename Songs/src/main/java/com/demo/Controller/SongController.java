@@ -114,7 +114,7 @@ private SongServiceImpl SongserviceImpl;
 
 		  log.info("himed55");
 		List<Songs> songs = mongoOperations.findAll(Songs.class);
-
+  log.info("p33"+songs);
       return songs;
 	}
 

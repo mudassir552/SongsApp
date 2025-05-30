@@ -1,10 +1,14 @@
 package com.example.demo.Controllers;
 
 import java.util.*;
+
+import com.example.demo.Userinfo.Userinfo;
 import com.example.demo.UserinfoService.SongService;
 import com.example.demo.Exceptions.UserNotFoundException;
 import com.example.demo.Requests.SongsRequest;
 import com.example.demo.Roles.Roles;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +40,7 @@ import com.example.demo.Users.User;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.client.RestTemplate;
+
 
 @Slf4j
 @Controller
@@ -91,28 +96,27 @@ public class UserController {
     @PostMapping("/user/signup")
     public ResponseEntity<String> RegisterSignedUpUser(@Valid @RequestBody Authrequest user) throws Exception {
 
-        // Check if the user already exists
+
         Optional<User> existingUser = userrepo.findByName(user.getUsername());
 
         if (existingUser.isPresent()) {
-            // Throw a custom exception or handle it gracefully
+
             return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
         }
 
-        // Create new user and set properties
         User registerUser = new User();
         registerUser.setName(user.getUsername());
 
-        // Encrypt password before saving
-        String encodedPassword = passwordEncoder.encode(user.getPassword()); // Assuming BCryptPasswordEncoder is injected
+
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
         registerUser.setPassword(encodedPassword);
 
-        // Set roles (ensure Role and RoleType are properly mapped)
+
         Role role = new Role();
         role.setRole(Roles.NORMAL_USER);
         registerUser.setRoles(List.of(role));
 
-        // Save the user to the database
+
         userrepo.save(registerUser);
 
         // Return success message
@@ -142,33 +146,46 @@ public class UserController {
     }
 
     @PostMapping("/authenticate")
-    public String authenticateAndGetToken(@ModelAttribute() Authrequest authRequest, HttpServletResponse response) throws InvalidCredentialsException {
-        // Step 1: Check if the user exists
+    public String authenticateAndGetToken(@ModelAttribute() Authrequest authRequest, HttpServletResponse response,HttpServletRequest request) throws InvalidCredentialsException {
+
         Optional<User> existingUser = userrepo.findByName(authRequest.getUsername());
-        User existingUserObj = existingUser.get();
+        boolean hasAccessToken = false;
         if (!existingUser.isPresent()) {
             throw new UserNotFoundException("User not found! Please signup.");
         }
 
-        // Step 2: Validate the password
-        log.info(existingUserObj.getName());
-        log.info(existingUserObj.getPassword());
-        log.info(authRequest.getUsername());
-        log.info(authRequest.getPassword());
+        User existingUserObj = existingUser.get();
+       Userinfo userinfo = new Userinfo(existingUserObj);
+        Cookie cookie [] = request.getCookies();
 
-        // Step 3: Generate access and refresh tokens
-        String accessToken = jwtservice.generateToken(existingUserObj.getName());  // Short-lived
-        String refreshToken = jwtservice.generateRefreshToken(existingUserObj.getName());  // Longer-lived
+        if(cookie!=null){
+
+            for (Cookie cook :  cookie) {
+
+                if ("accessToken".equals(cook.getName())) {
+
+                    if (jwtservice.validateToken(cook.getValue(), userinfo))
+                        hasAccessToken = true;
+                      break;
+                }
+            }
+            }
+
+
+    if(!hasAccessToken) {
+
+        String accessToken = jwtservice.generateToken(existingUserObj.getName());
+        String refreshToken = jwtservice.generateRefreshToken(existingUserObj.getName());
 
         Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
         accessTokenCookie.setHttpOnly(true);  // Prevent JavaScript access
-        accessTokenCookie.setSecure(true);    // Ensure it is sent over HTTPS (only in production)
+        accessTokenCookie.setSecure(false);    // Ensure it is sent over HTTPS (only in production)
         accessTokenCookie.setMaxAge(3600);   // 1 hour expiry time
         accessTokenCookie.setPath("/");      // Make the cookie available to the entire site
 
         Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
         refreshTokenCookie.setHttpOnly(true);  // Prevent JavaScript access
-        refreshTokenCookie.setSecure(true);    // Ensure it is sent over HTTPS (only in production)
+        refreshTokenCookie.setSecure(false);    // Ensure it is sent over HTTPS (only in production)
         refreshTokenCookie.setMaxAge(2592000); // 30 days expiry time for refresh token
         refreshTokenCookie.setPath("/");       // Make the cookie available to the entire site
 
@@ -176,7 +193,14 @@ public class UserController {
         response.addCookie(accessTokenCookie);
         response.addCookie(refreshTokenCookie);
 
-        return "redirect:/user-songs";
+    }
+
+
+
+       return "redirect:/user-songs";
+
+
+
     }
 
 
@@ -184,9 +208,13 @@ public class UserController {
 
 
     @GetMapping("/user-songs")
-    public String getUserSongs(@CookieValue(name = "accessToken", required = true) String token, Model model) {
+    public String getUserSongs(@CookieValue(name = "accessToken", required = true) String token, Model model) throws JsonProcessingException {
         List<SongsRequest> songs = SongService.getSongs(token);
-        model.addAttribute("songs", songs);
+
+        ObjectMapper mapper = new ObjectMapper();
+        String songsJson = mapper.writeValueAsString(songs);
+        model.addAttribute("songs", songsJson);
+
         return "Songs";
     }
 
@@ -214,7 +242,7 @@ public class UserController {
     @GetMapping("/login")
     public String login(Model model) {
         Authrequest authRequest = new Authrequest();
-        authRequest.setUsername("ak");
+        authRequest.setUsername("admin");
         authRequest.setPassword("123");
         model.addAttribute("Authrequest", authRequest);
 

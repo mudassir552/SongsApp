@@ -49,7 +49,7 @@ public class SongServiceImpl implements SongsService{
 				   
 
 				    s1.setArtist(artist);
-				    s1.setImage(fileBytes);
+				    //s1.setImage(fileBytes);
 				    s1.setSong(song);
 				   // Close the InputStream when done
 				} catch (IOException e) {
@@ -78,14 +78,14 @@ public Songs addSongs(String song, String artist, MultipartFile image, Multipart
             // Process image and audio files
             s1.setArtist(artist);
             s1.setSong(song);
-            s1.setImage(readBytesFromInputStream(image.getInputStream()));
-            s1.setSongFile(readBytesFromInputStream(audio.getInputStream()));
+           // s1.setImage(readBytesFromInputStream(image.getInputStream()));
+           // s1.setSongFile(readBytesFromInputStream(audio.getInputStream()));
             
 
             // Insert the Songs object into the repository
             k = songsRepo.insert(s1);
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

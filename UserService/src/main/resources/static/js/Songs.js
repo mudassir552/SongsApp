@@ -2,12 +2,11 @@
 const songsData = document.querySelector('.SongsContainer').getAttribute('data-songs');
 const songsContainer = document.querySelector('.SongsContainer');
 const songs = JSON.parse(songsData);
-
-const searchBtn=document.querySelector('.search-btn');
 console.log(songs);
+const searchBtn=document.querySelector('.search-btn');
+
 let audio=null;
 
-console.log(songs.length);
 
 let html="";
 
@@ -28,9 +27,7 @@ searchBtn.addEventListener("click", (e) => {
  }
 
 
-  console.log(inputText);
 
- console.log("Hitting backend from 2");
  fetch(`/user/api/youtube/videos/${encodeURIComponent(inputText)}`)
 
     .then(res => res.json())
@@ -79,11 +76,11 @@ for(let i=0;i<songs.length;i++){
      <h2 style="text-align:center;">${songs[i].song}</h2>
 
                 <div class="imageContainer">
-                <img  class="Songimage" src="data:image/png;base64,${songs[i].image}"  style="height:300px;"alt="Song Image">
+                <img  class="Songimage" src="${songs[i].imageLoc}"  style="height:300px;"alt="Song Image">
 
                 </div>
                  <audio controls preload="none" class="audio" style="max-width:80%; display:block; margin:20px auto;">
-                               <source src="data:audio/mpeg;base64,${songs[i].songFile}" type="audio/mpeg">
+                                <source src="${songs[i].songLoc}" type="audio/mpeg">
                                Your browser does not support the audio element.
                            </audio>
 
@@ -91,7 +88,7 @@ for(let i=0;i<songs.length;i++){
 </div>
 <br>
    `
-   console.log(songs[i].songFile);
+
 
    }
 

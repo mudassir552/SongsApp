@@ -13,14 +13,14 @@ import com.example.demo.Users.User;
 
 @Repository
 public interface Userrepo extends JpaRepository<User,Long>{
-	
-	
-  
-	//User findByUsername("Abdul");
-	
+
+
+
+    //User findByUsername("Abdul");
+
     //@Query("select * from user u where u.name=:name")
-	Optional<User> findByName(String name);
-	
+    Optional<User> findByName(String name);
+
     @Query(value="select * from User",nativeQuery=true)
     List<User> findAllWithRole();
 

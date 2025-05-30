@@ -1,6 +1,6 @@
 
 const container = document.querySelector(".songs-container");
-
+console.log("helllo");
 function loadTrendingYoutubeVideos() {
 
 console.log("Hitting backend from 1");
@@ -9,6 +9,8 @@ console.log("Hitting backend from 1");
 
         .then(res => res.json())
         .then(data => {
+
+        console.log(data);
           const songsContainer = document.querySelector(".songs-container");
 
             data.items.forEach(video => {
@@ -31,7 +33,7 @@ console.log("Hitting backend from 1");
             });
         })
         .catch(error => {
-            console.error("Error loading videos:"+error);
+            console.error("Error loading videos:");
         });
 }
 

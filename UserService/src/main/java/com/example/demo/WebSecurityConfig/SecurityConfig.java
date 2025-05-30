@@ -100,6 +100,8 @@ public class SecurityConfig {
 								"/css/**",
 								"/static/**",
 								"/images/**",
+								"/user/actuator/prometheus",
+								"/actuator/prometheus",
 								"/**/*.js",
 								"/**/*.css",
 								"/**/*.html",

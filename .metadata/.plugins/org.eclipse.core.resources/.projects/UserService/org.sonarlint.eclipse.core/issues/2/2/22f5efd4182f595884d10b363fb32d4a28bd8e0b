@@ -1,0 +1,10 @@
+
+ç	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.b 6ec98ec2669fd8133ba038d2ee092c80h
+v
+java:S6813%"BRemove this field injection and use constructor injection instead.b 0132ec8cee01c5dd244e1a60fe6448a1h
+Ü
+java:S37768"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.b e10718efd52407198909f8b7126ec6cch
+o	java:S1252"<This block of commented-out lines of code should be removed.b 050e9bd95c7440116308e49e6a084c8bh
+^	java:S106M"+Replace this use of System.out by a logger.b bb1c3f2ea781263d3a2bb92b06a2061fh
+^	java:S106`"+Replace this use of System.out by a logger.b bb1c3f2ea781263d3a2bb92b06a2061fh
+^	java:S106b"+Replace this use of System.out by a logger.b bb1c3f2ea781263d3a2bb92b06a2061fh

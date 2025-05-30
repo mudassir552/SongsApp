@@ -26,91 +26,91 @@ import lombok.Builder;
 @Table(name="user")
 public class User {
 
-	
-	@jakarta.persistence.Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Long Id;
-	@Column(name="name",nullable=false)
-	private String name;
-    
-	@Column(nullable=false)
-	private String Email;
-	
-	
 
- @OneToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
-	@JoinColumn(name="user_id",nullable=false)
-	private List<Role> role;
-	
-   public User(Long id, String name, String email, List<Role> role, String password) {
-		super();
-		Id = id;
-		this.name = name;
-		Email = email;
-		this.role = role;
-		Password = password;
-	}
+    @jakarta.persistence.Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Long Id;
+    @Column(name="name",nullable=false)
+    private String name;
 
-
-	
-   @Column(nullable=false)
-	private String Password;
-	
-	
-	public User() {
-		
-	}
-	
-	
-	
-	public String getEmail() {
-		return Email;
-	}
+    @Column(nullable=false)
+    private String Email;
 
 
 
-	public void setEmail(String email) {
-		Email = email;
-	}
+    @OneToMany(cascade=CascadeType.ALL,fetch=FetchType.EAGER)
+    @JoinColumn(name="user_id",nullable=false)
+    private List<Role> role;
+
+    public User(Long id, String name, String email, List<Role> role, String password) {
+        super();
+        Id = id;
+        this.name = name;
+        Email = email;
+        this.role = role;
+        Password = password;
+    }
 
 
 
-	public Long getId() {
-		return Id;
-	}
-	public void setId(Long id) {
-		Id = id;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public List<Role> getRoles() {
-		return role;
-	}
+    @Column(nullable=false)
+    private String Password;
 
 
-	public void setRoles(List<Role> role) {
-		this.role = role;
-	}
+    public User() {
+
+    }
 
 
-	public String getPassword() {
-		return Password;
-	}
-	public void setPassword(String password) {
-		Password = password;
-	}
-	public List<Role> getRole() {
-		return role;
-	}
+
+    public String getEmail() {
+        return Email;
+    }
 
 
-	public void setRole(List<Role> role) {
-		this.role = role;
-	}
-	
+
+    public void setEmail(String email) {
+        Email = email;
+    }
+
+
+
+    public Long getId() {
+        return Id;
+    }
+    public void setId(Long id) {
+        Id = id;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Role> getRoles() {
+        return role;
+    }
+
+
+    public void setRoles(List<Role> role) {
+        this.role = role;
+    }
+
+
+    public String getPassword() {
+        return Password;
+    }
+    public void setPassword(String password) {
+        Password = password;
+    }
+    public List<Role> getRole() {
+        return role;
+    }
+
+
+    public void setRole(List<Role> role) {
+        this.role = role;
+    }
+
 }
