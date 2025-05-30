@@ -10,8 +10,7 @@ target/
 
 mvnw.cmd
 mvnw
-.xml
-pom.xml
+
 pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.versionsBackup
