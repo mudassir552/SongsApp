@@ -42,22 +42,14 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 public class SecurityConfig {
 
-	/*
-	 * private UserDetailsService userDetailsService;
-	 * 
-	 * public SecurityConfig(UserDetailsService userDetailsService) {
-	 * this.userDetailsService=userDetailsService; }
-	 */
-	 
-	// UserDetails user = userinfoservice.loadUserByUsername("rahul");
+	
 
 	private UserinfoService userinfoservice;
 	  @Autowired 
 	  public SecurityConfig(UserinfoService userinfoservice) {
 	  this.userinfoservice=userinfoservice; }
 	 
-	@Autowired
-	private Userinfo userinfo;
+
 	
 	@Bean
 	SecurityContextRepository SecurityContextRepository() {
@@ -68,9 +60,7 @@ public class SecurityConfig {
 	 private static final Logger LOGGER = LoggerFactory.getLogger(SecurityConfig.class);
 	@Autowired
 	private JWTFilter JWTFilter;
-	/*
-	 * @Bean public JWTFilter jwtFilter() { return new JWTFilter(); }
-	 */
+	
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -78,13 +68,7 @@ public class SecurityConfig {
 
 	}
 
-	/*
-	 * @Bean public UserDetailsService UserDetailsService() {
-	 * 
-	 * return new UserDetailsService;
-	 * 
-	 * }
-	 */
+	
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -112,7 +96,7 @@ public class SecurityConfig {
 
 				.logout(logout -> logout.permitAll())
 				.authenticationProvider(authenticationProvider())
-				.addFilterAfter(JWTFilter, UsernamePasswordAuthenticationFilter.class); // your custom JWT filter
+				.addFilterAfter(JWTFilter, UsernamePasswordAuthenticationFilter.class); 
 
 		return http.build();
 	}
