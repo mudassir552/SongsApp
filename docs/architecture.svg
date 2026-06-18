@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="420" viewBox="0 0 900 420">
+  <style>
+    .box { fill: #ffffff; stroke: #2b6cb0; stroke-width:2; rx:6; }
+    .label { font-family: Arial, sans-serif; font-size:14px; fill:#1a202c; }
+    .title { font-family: Arial, sans-serif; font-size:16px; font-weight:700; fill:#2b6cb0; }
+    .arrow { stroke: #2d3748; stroke-width:2; fill: none; marker-end: url(#arrowhead); }
+    .bg { fill: #f7fafc; }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2d3748" />
+    </marker>
+  </defs>
+  <rect class="bg" x="0" y="0" width="900" height="420" />
+
+  <!-- Eurekaserver -->
+  <rect class="box" x="340" y="20" width="220" height="70" />
+  <text class="title" x="450" y="44" text-anchor="middle">Eureka Server</text>
+  <text class="label" x="450" y="66" text-anchor="middle">Service discovery (8761)</text>
+
+  <!-- UserService -->
+  <rect class="box" x="80" y="120" width="220" height="90" />
+  <text class="title" x="190" y="144" text-anchor="middle">UserService</text>
+  <text class="label" x="190" y="166" text-anchor="middle">User management (8082)</text>
+
+  <!-- Songs Service -->
+  <rect class="box" x="340" y="120" width="220" height="90" />
+  <text class="title" x="450" y="144" text-anchor="middle">Songs Service</text>
+  <text class="label" x="450" y="166" text-anchor="middle">Song catalog (8081)</text>
+
+  <!-- API Gateway (optional) -->
+  <rect class="box" x="600" y="120" width="220" height="90" />
+  <text class="title" x="710" y="144" text-anchor="middle">API Gateway</text>
+  <text class="label" x="710" y="166" text-anchor="middle">Routing / Auth</text>
+
+  <!-- DBs -->
+  <rect class="box" x="340" y="240" width="220" height="70" />
+  <text class="title" x="450" y="264" text-anchor="middle">Databases</text>
+  <text class="label" x="450" y="286" text-anchor="middle">Postgres / H2</text>
+
+  <!-- Arrows -->
+  <path class="arrow" d="M450 90 L450 120" />
+  <path class="arrow" d="M190 210 L190 240" />
+  <path class="arrow" d="M450 210 L450 240" />
+  <path class="arrow" d="M710 210 L710 240" />
+
+  <path class="arrow" d="M260 150 L340 150" />
+  <path class="arrow" d="M560 150 L600 150" />
+
+  <text class="label" x="450" y="320" text-anchor="middle">High-level architecture: Services register with Eureka; API Gateway exposes endpoints to clients; services persist into databases; internal communication via REST.</text>
+</svg>
