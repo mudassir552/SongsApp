@@ -50,6 +50,8 @@ Each module follows a typical layered Spring Boot architecture:
 
 Services are independent; they communicate via REST. Eureka provides service discovery so services can locate each other by name during development.
 
+![High-level architecture](./docs/architecture.svg)
+
 Getting started (prereqs)
 -------------------------
 - JDK 17+ installed and JAVA_HOME set
